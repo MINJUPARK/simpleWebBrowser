@@ -3,9 +3,11 @@ package kr.hs.emirim.minju0227.simplewebbrowser;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.*;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -22,6 +24,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         butPrev = (Button)findViewById(R.id.but_prev);
         web = (WebView) findViewById(R.id.web);
         butMove.setOnClickListener(this);
+        butPrev.setOnClickListener(this); // 현재 메모리의 참조값이 들어있다.
+        web.setWebViewClient(new WebViewClient());
+        WebSettings webSet= web.getSettings();
+        webSet.setBuiltInZoomControls(true);
+        webSet.setJavaScriptEnabled(true);
+        web.loadUrl("http://www.naver.com");
     }
 
     /**
@@ -31,7 +39,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     @Override
     public void onClick(View v) {
-
+        String url=null;
+        switch(v.getId()) {
+            case R.id.but_move:
+                url=editUrl.getText().toString();
+                if(!url.contains("http://"))
+                    url = "http://"+url;
+                web.loadUrl(url);
+                break;
+            case R.id.but_prev:
+                web.goBack();
+                break;
+            }
+        }
 
     }
-}
